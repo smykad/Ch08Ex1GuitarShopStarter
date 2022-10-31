@@ -70,6 +70,7 @@ namespace GuitarShop.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Update(int id)
         {
+            
             // get Product object for specified primary key
             Product product = context.Products
                 .Include(p => p.Category)
@@ -79,6 +80,7 @@ namespace GuitarShop.Areas.Admin.Controllers
             ViewBag.Action = "Update";
             ViewBag.Categories = categories;
 
+            
             // bind product to AddUpdate view
             return View("AddUpdate", product);
         }
@@ -91,12 +93,15 @@ namespace GuitarShop.Areas.Admin.Controllers
                 if (product.ProductID == 0)           // new product
                 {
                     context.Products.Add(product);
+                    TempData["UserMessage"] = $"You just added the product: {product.Name}";
                 }
                 else                                  // existing product
                 {
                     context.Products.Update(product);
+                    TempData["UserMessage"] = $"You just updated the product: {product.Name}";
                 }
                 context.SaveChanges();
+                
                 return RedirectToAction("List");
             }
             else
